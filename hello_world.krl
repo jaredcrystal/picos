@@ -27,7 +27,7 @@ ruleset hello_world {
   rule hello_world {
     select when echo hello
     pre {
-      name = event:attr("name").klog("our passed in name: ")
+    name = event:attr("name").defaultsTo(ent:name,"use stored name")
     }
     send_directive("say") with
       something = "Hello " + name
