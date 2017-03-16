@@ -1,0 +1,29 @@
+1. I used the engine ruleset validator to parse my rulesets in the browser.
+
+2.
+{
+  "directives": [
+    {
+      "options": {
+        "something": "Hello World"
+      },
+      "name": "say",
+      "meta": {
+        "rid": "echo",
+        "rule_name": "hello",
+        "txn_id": "TODO",
+        "eid": "__testing"
+      }
+    }
+  ]
+}
+
+  1 directive was returned.
+  I think 1 rule ran.
+
+  3.
+
+
+
+Deliverables:
+1. 
