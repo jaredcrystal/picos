@@ -13,15 +13,14 @@ ruleset track_trips {
         { "name": "__testing" }
       ],
       "events": [
-        { "domain": "echo", "type": "hello" },
-        { "domain": "echo", "type": "message", "attrs": [ "input" ] }
+         { "domain": "echo", "type": "message", "attrs": [ "mileage" ] }
       ]
     }
   }
 
   rule process_trips {
-    select when echo hello
-    send_directive("say") with
-      something = "Hello World"
+    select when echo message
+    send_directive("trip") with
+      trip_length = event:attr("mileage")
   }
 }
