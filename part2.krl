@@ -18,7 +18,6 @@ ruleset part2 {
          { "domain": "explicit", "type": "trip_processed", "attrs": [ "mileage" ] },
          { "domain": "explicit", "type": "find_long_trips", "attrs": [ "mileage" ] },
          { "domain": "explicit", "type": "found_long_trip", "attrs": [ "mileage" ] }
-
       ]
     }
   }
@@ -27,21 +26,24 @@ ruleset part2 {
     select when car new_trip
     send_directive("trip") with
       trip_length = event:attr("mileage")
+      trip_time = time:now()
     fired {
       raise explicit event "trip_processed"
-        attributes event:attrs()
+        attributes {"mileage": event:attr("mileage"), "timestamp": time:now()}
     }
   }
 
   rule find_long_trips {
     select when explicit trip_processed
+    pre {
+      attrs = {"mileage": event:attr("mileage"), "timestamp": time:now()}
+    }
     if (event:attr("mileage").as("Number") > long_trip.as("Number")) then
-      send_directive("trip") with
-        trip_length = event:attr("mileage")
-      fired {
-        raise explicit event "found_long_trip"
-          attributes event:attrs()
-      }
+      noop()
+    fired {
+      raise explicit event "found_long_trip"
+        attributes attrs
+    }
   }
 
   rule found_long_trip {
