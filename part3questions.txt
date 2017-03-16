@@ -1,5 +1,5 @@
 Deliverables for part3
-1. source URL for ruleset https://raw.githubusercontent.com/jaredcrystal/picos/master/trip_store.krl?token=ANf1MZGQPVMVm9wInUq_HS_o1yPmiOT4ks5Y1FJcwA%3D%3D
+1. source URL for ruleset https://raw.githubusercontent.com/jaredcrystal/picos/master/trip_store.krl?token=ANf1MaB2oK266oQMqDP8HZaIlQyMlv97ks5Y1FT-wA%3D%3D
 2. RID: trip_store
 3. ECI: cj0aahzsy0001g8en04btwid3
 4. screen shot separate
