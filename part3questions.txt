@@ -1,2 +1,17 @@
 Deliverables for part3
-1. 
+1. source URL for ruleset https://raw.githubusercontent.com/jaredcrystal/picos/master/trip_store.krl?token=ANf1MZGQPVMVm9wInUq_HS_o1yPmiOT4ks5Y1FJcwA%3D%3D
+2. RID: trip_store
+3. ECI: cj0aahzsy0001g8en04btwid3
+4. screen shot separate
+5. Questions below:
+
+1. Collect trips is the event side of the event-query api since it response to the event and
+  stores trips. The trips functions illustrate the query aspect since it returns
+  the trips collected thus far.
+
+2. I used the filter operator to filter out the trips from the trips array that did not meet the "long trip" cut-off
+
+3. If it's not in provies, then the function can't be access when your ruleset is used as a module.
+
+4. If it's not in shares, then the function can't be accessed by others. Basically,
+  it makes the function public for querying.
