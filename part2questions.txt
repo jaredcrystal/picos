@@ -1,7 +1,7 @@
 Deliverables for part 2:
-1.
-2.
-3.
+1. https://raw.githubusercontent.com/jaredcrystal/picos/master/part2.krl?token=ANf1MQIfYbQKsDW3wsJebfSHWu1MdYW4ks5Y1DtbwA%3D%3D
+2. RID: part2
+3. ECI: cj0aahzsy0001g8en04btwid3 
 4. Questions below:
 
 
