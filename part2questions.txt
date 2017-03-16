@@ -1,0 +1,20 @@
+Deliverables for part 2:
+1.
+2.
+3.
+4. Questions below:
+
+
+1. If you enter a mileage, then it returns it, otherwise, it returns an empty string.
+2. I would consider the new rule an event intermediary. It is potentially a
+  preprocessing step, but in this case, it just passes mileage to the next
+  event which handles it. This is an event stream splitting intermediary.
+3. I can see from the longs that find_long_trips works because it tells me which
+  queries were added to the pico queue and which were fired. For example,
+  domain: 'explicit',
+  type: 'trip_processed' },
+  eci: 'cj0aahzsy0001g8en04btwid3' } not fired
+  tells me that as per the conditional, the event was not fired when the trip
+  was not long. In the other case, when the conditional is met, the logs
+  indicate that the event was fired.
+4. You could store long_trip as an entity variable.

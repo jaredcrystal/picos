@@ -18,7 +18,7 @@ ruleset track_trips {
     }
   }
 
-  rule process_trips {
+  rule process_trip {
     select when echo message
     send_directive("trip") with
       trip_length = event:attr("mileage")
