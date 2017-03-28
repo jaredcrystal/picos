@@ -5,6 +5,7 @@ ruleset track_trips {
     author "Jared Crystal"
     logging on
     shares hello, __testing
+    use module trip_store
   }
 
   global {
@@ -60,6 +61,31 @@ ruleset track_trips {
     always {
       raise wrangler event "pending_subscription_approval"
         attributes attributes
+      // raise wrangler event "subscription" with
+      //   name = vehicle_name
+      //   name_space = "car"
+      //   my_role = "fleet"
+      //   subscriber_role = "vehicle"
+      //   channel_type = "subscription"
+      //   subscriber_eci = the_vehicle.eci
+    }
+  }
+
+  rule report_needed {
+    select when car report_needed
+    pre {
+      thing = event:attr("eci").klog("eci: ")
+    }
+    always {
+      event:send({
+        "eci": event:attr("eci"),
+        "eid": "report",
+        "domain": "car",
+        "type": "report",
+        "attrs": { "trips": trip_store:trips() }
+      })
+      // raise car event "report"
+      //   attributes { "trips": trip_store:trips() }
     }
   }
 }
