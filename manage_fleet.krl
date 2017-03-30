@@ -4,7 +4,7 @@ ruleset manage_fleet {
     description << For part 2 >>
     author "Jared Crystal"
     logging on
-    shares __testing, vehicles, trips
+    shares __testing, vehicles, trips, get_latest_reports
     use module Subscriptions
     use module io.picolabs.pico alias stupid
   }
@@ -22,11 +22,19 @@ ruleset manage_fleet {
           response{"content"}.decode()
       })
     }
+    get_latest_reports = function() {
+      ent:reports_list.slice((ent:reports_list.length() < 5) => 0 | ent:reports_list.length()-5, ent:reports_list.length()-1).map(function(key) {
+        report = ent:reports{key};
+        report{"responding"} = report{"trips"}.length();
+        report
+      })
+    }
 
     __testing = {
       "queries": [
         { "name": "vehicles" },
-        { "name": "trips"}
+        { "name": "trips"},
+        { "name": "get_latest_reports"}
       ],
       "events": [
         { "domain": "car", "type": "new_vehicle", "attrs": [ "name" ] },
@@ -99,8 +107,33 @@ ruleset manage_fleet {
     }
   }
 
-  rule scatter_report {
+  rule scatter_report_init {
     select when car request_report
+    pre {
+      uid = time:now().replace(".", "_")
+      new_report = ent:reports || {}
+      new_report{uid} = {
+        "vehicles": Subscriptions:getSubscriptions().filter(function(subcription){
+          subcription{["attributes","subscriber_role"]} == "vehicle"
+        }).length(),
+        "trips": []
+      }
+
+      new_report_list = ent: reports_list || []
+      new_report_list = new_report_list.append(uid)
+    }
+    always {
+      ent:reports := new_report;
+      ent:reports_list := new_report_list;
+      raise car event "request_report_with_uid"
+          attributes {
+            "uid": uid
+          }
+    }
+  }
+
+  rule request_report_with_uid {
+    select when car request_report_with_uid
     foreach Subscriptions:getSubscriptions() setting (subscription)
       pre {
         subs_attrs = subscription{"attributes"}
@@ -111,13 +144,23 @@ ruleset manage_fleet {
           "eid": "report_needed",
           "domain": "car",
           "type": "report_needed",
-          "attrs": { "eci": stupid:myself(){"eci"} }
+          "attrs": { "eci": stupid:myself(){"eci"}, "uid": event:attr("uid") }
         })
   }
 
   rule report {
     select when car report
-    send_directive("received report") with
-      trips = event:attr("trips")
+    pre {
+      uid = event:attr("uid")
+      new_report = ent:reports
+      tmp_array = new_report{[uid, "trips"]}
+      tmp_dict = {}
+      tmp_dict{"vehicle_trip"} = event:attr("trips")
+      tmp_array = tmp_array.append(tmp_dict)
+      new_report{[uid, "trips"]} = tmp_array
+    }
+    always {
+      ent:reports := new_report
+    }
   }
 }

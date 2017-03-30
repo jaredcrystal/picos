@@ -76,16 +76,12 @@ ruleset track_trips {
     pre {
       thing = event:attr("eci").klog("eci: ")
     }
-    always {
-      event:send({
-        "eci": event:attr("eci"),
-        "eid": "report",
-        "domain": "car",
-        "type": "report",
-        "attrs": { "trips": trip_store:trips() }
-      })
-      // raise car event "report"
-      //   attributes { "trips": trip_store:trips() }
-    }
+    event:send({
+      "eci": event:attr("eci"),
+      "eid": "report",
+      "domain": "car",
+      "type": "report",
+      "attrs": { "trips": trip_store:trips(), "uid": event:attr("uid") }
+    })
   }
 }
